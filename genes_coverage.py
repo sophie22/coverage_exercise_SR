@@ -2,7 +2,6 @@
 
 # Import libraries/packages for use in the code
 import sys
-from numpy import outer
 import pandas as pd # v1.3.4
 
 ### Read inputs from  the command line
