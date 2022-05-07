@@ -21,3 +21,9 @@ sambamba_df = pd.read_csv(sambamba_file, sep='\t')
 sambamba_df["ExonLength"] = sambamba_df["EndPosition"] - sambamba_df["StartPosition"]
 # Calculate number of bases above 30x coverage
 sambamba_df["AboveThreshold"] = sambamba_df[coverage_column] / 100 * sambamba_df["ExonLength"]
+
+# Identify unique genes
+panel_genes = sambamba_df["GeneSymbol;Accession"].unique().tolist()
+# Split 'GeneSymbol;Accession' into separate columns
+sambamba_df[["GeneSymbol", "Accession"]] = sambamba_df[
+    "GeneSymbol;Accession"].str.split(';', 1, expand=True)
