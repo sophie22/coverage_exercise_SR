@@ -2,6 +2,7 @@
 
 # Import libraries/packages for use in the code
 import sys
+from numpy import outer
 import pandas as pd # v1.3.4
 
 ### Read inputs from  the command line
@@ -25,6 +26,9 @@ below_threshold_exons_df = sambamba_df[sambamba_df[coverage_column] < 100.0]
 
 ### Identify unique genes with at least one exon with suboptimal coverage
 below_threshold_genes = below_threshold_exons_df["GeneSymbol"].unique().tolist()
-print(below_threshold_genes)
 
 ### Write gene symbols with suboptimal coverage to file
+outfile = f"genes_suboptimal_coverage{coverage_threshold}x.txt"
+with open(outfile, 'w') as fh:
+    for gene in below_threshold_genes:
+        fh.write(gene + "\n")
