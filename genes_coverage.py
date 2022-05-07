@@ -2,6 +2,7 @@
 
 # Import libraries/packages for use in the code
 import sys
+from tracemalloc import start
 import pandas as pd # v1.3.4
 
 ### Read inputs from  the command line
@@ -16,18 +17,7 @@ coverage_column = "percentage" + coverage_threshold
 
 ### Load sambamba output file contents into a DataFrame
 sambamba_df = pd.read_csv(sambamba_file, sep='\t')
-# Split 'GeneSymbol;Accession' into separate columns
-sambamba_df[["GeneSymbol", "Accession"]] = sambamba_df[
-    "GeneSymbol;Accession"].str.split(';', 1, expand=True)
-
-### Identify exons with less than 100% coverage at 30x
-below_threshold_exons_df = sambamba_df[sambamba_df[coverage_column] < 100.0]
-
-### Identify unique genes with at least one exon with suboptimal coverage
-below_threshold_genes = below_threshold_exons_df["GeneSymbol"].unique().tolist()
-
-### Write gene symbols with suboptimal coverage to file
-outfile = f"genes_suboptimal_coverage{coverage_threshold}x.txt"
-with open(outfile, 'w') as fh:
-    for gene in below_threshold_genes:
-        fh.write(gene + "\n")
+# Calculate exon length by end-start position
+sambamba_df["ExonLength"] = sambamba_df["EndPosition"] - sambamba_df["StartPosition"]
+# Calculate number of bases above 30x coverage
+sambamba_df["AboveThreshold"] = sambamba_df[coverage_column] / 100 * sambamba_df["ExonLength"]
