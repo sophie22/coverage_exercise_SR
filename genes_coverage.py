@@ -62,4 +62,12 @@ gene_coverage_df = pd.DataFrame.from_dict(gene_coverage_dict,
                     "endPos", "GeneSymbol", "Accession", "genePercentage"])
 # Round percentage values to 2 dp
 gene_coverage_df["genePercentage"] = gene_coverage_df["genePercentage"].round(2)
-print(gene_coverage_df)
+
+### Identify unique genes with at least one exon with suboptimal coverage
+below_threshold_genes = gene_coverage_df[
+    gene_coverage_df["genePercentage"] < 100.00
+    ]
+
+### Write gene symbols with suboptimal coverage to file
+outfile = f"genes_w_suboptimal_coverage{coverage_threshold}x.txt"
+below_threshold_genes.to_csv(outfile, sep="\t", index=False)
