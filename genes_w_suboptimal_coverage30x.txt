@@ -1,3 +1,4 @@
+The following genes had regions not fully covered at 30x: 
 chromosome	startPos	endPos	GeneSymbol	Accession	genePercentage
 1	26126711	26142028	SELENON	NM_020451.2	94.93
 1	155580029	155583839	MSTO1	NM_018116.3	98.65

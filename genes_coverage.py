@@ -68,8 +68,7 @@ below_threshold_genes = gene_coverage_df[
     ]
 
 ### Write gene symbols with suboptimal coverage to file
-outfile = f"genes_suboptimal_coverage{coverage_threshold}x.txt"
+outfile = f"genes_w_suboptimal_coverage{coverage_threshold}x.txt"
 with open(outfile, 'w') as fh:
-    fh.write(f"The following genes had regions not fully covered at 30x: \n")
-    for gene in below_threshold_genes:
-        fh.write(gene + "\n")
+    fh.write(f"The following genes are not fully covered at {coverage_threshold}x: \n")
+below_threshold_genes.to_csv(outfile, sep="\t", index=False, mode='a')
