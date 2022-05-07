@@ -27,3 +27,37 @@ panel_genes = sambamba_df["GeneSymbol;Accession"].unique().tolist()
 # Split 'GeneSymbol;Accession' into separate columns
 sambamba_df[["GeneSymbol", "Accession"]] = sambamba_df[
     "GeneSymbol;Accession"].str.split(';', 1, expand=True)
+
+def genePCTcovered(df):
+    """
+        Args: DataFrame with at least the following columns
+            - 'ExonLength': which is the number of bases in the exon
+            - 'AboveThreshold': which is the number of bases with reads
+                above the threshold
+
+        Returns: list of chromosome, startPos, endPos, GeneSymbol, Accession
+            and the calculated genePercentage
+    """
+    chromosome = df["#chromosome"].to_list()[0]
+    startPos = df["StartPosition"].to_list()[0]
+    endPos = df["StartPosition"].to_list()[-1]
+    GeneSymbol = df["GeneSymbol"].to_list()[0]
+    Accession = df["Accession"].to_list()[0]
+
+    # Calculate percentage coverage above threshold aacross all gene bases
+    total_bases = df["ExonLength"].sum()
+    bases_above_threshold = df["AboveThreshold"].sum()
+    genePercentage = bases_above_threshold / total_bases * 100
+
+    return([chromosome, startPos, endPos, GeneSymbol, Accession, genePercentage])
+
+### Calculate combined coverage of genes
+gene_coverage_dict = {}
+for i, gene in enumerate(panel_genes):
+    gene_df = sambamba_df.loc[(sambamba_df["GeneSymbol;Accession"] == gene)]
+    gene_coverage_dict[i] = genePCTcovered(gene_df)
+
+gene_coverage_df = pd.DataFrame.from_dict(gene_coverage_dict,
+                    orient='index', columns=["chromosome", "startPos",
+                    "endPos", "GeneSymbol", "Accession", "genePercentage"])
+print(gene_coverage_df)
