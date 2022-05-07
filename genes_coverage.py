@@ -60,4 +60,6 @@ for i, gene in enumerate(panel_genes):
 gene_coverage_df = pd.DataFrame.from_dict(gene_coverage_dict,
                     orient='index', columns=["chromosome", "startPos",
                     "endPos", "GeneSymbol", "Accession", "genePercentage"])
+# Round percentage values to 2 dp
+gene_coverage_df["genePercentage"] = gene_coverage_df["genePercentage"].round(2)
 print(gene_coverage_df)
