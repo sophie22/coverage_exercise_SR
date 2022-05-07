@@ -1,4 +1,15 @@
 # Python 3.8
+"""This script is used to identify poorly covered regions/genes
+
+    Inputs:
+        * sambamba output file in tsv format
+        * optionally a coverage threshold value, which must have a
+        corresponding column name in the format of 'percentageX' where X is the
+        coverage threshold
+
+    Output:
+        * a file listing genes with less than 100% coverage
+"""
 
 # Import libraries/packages for use in the code
 import sys
