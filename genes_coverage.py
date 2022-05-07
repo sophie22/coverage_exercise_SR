@@ -16,11 +16,15 @@ coverage_column = "percentage" + coverage_threshold
 
 ### Load sambamba output file contents into a DataFrame
 sambamba_df = pd.read_csv(sambamba_file, sep='\t')
-print(sambamba_df.columns)
-print(sambamba_df.head())
+# Split 'GeneSymbol;Accession' into separate columns
+sambamba_df[["GeneSymbol", "Accession"]] = sambamba_df[
+    "GeneSymbol;Accession"].str.split(';', 1, expand=True)
 
 ### Identify exons with less than 100% coverage at 30x
+below_threshold_exons_df = sambamba_df[sambamba_df[coverage_column] < 100.0]
 
 ### Identify unique genes with at least one exon with suboptimal coverage
+below_threshold_genes = below_threshold_exons_df["GeneSymbol"].unique().tolist()
+print(below_threshold_genes)
 
 ### Write gene symbols with suboptimal coverage to file
