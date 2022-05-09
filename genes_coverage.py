@@ -14,10 +14,21 @@
 # Import libraries/packages for use in the code
 import sys
 import pandas as pd # v1.3.4
+import subprocess
 
 ### Read inputs from  the command line
 # sambamba output file (tsv)
 sambamba_file = sys.argv[1]
+sambamba_filename = sambamba_file.strip(".txt")
+sambamba_tsv = sambamba_filename + ".tsv"
+# command = f"sed -e 's/ /\t/g' {sambamba_file} > {sambamba_tsv}"
+# process = subprocess.run([command], text=True)
+
+# Parse sample and panel name from the input filename
+filename = sambamba_file.split("_S")[0]
+sample_name = filename.split("_")[0]
+panel_name = filename.split(".")[0].split("_")[-1]
+
 # coverage threshold (default to 30)
 if len(sys.argv) > 2:
     coverage_threshold = sys.argv[2]
@@ -37,6 +48,7 @@ panel_genes = sambamba_df["GeneSymbol;Accession"].unique().tolist()
 # Split 'GeneSymbol;Accession' into separate columns
 sambamba_df[["GeneSymbol", "Accession"]] = sambamba_df[
     "GeneSymbol;Accession"].str.split(';', 1, expand=True)
+
 
 def genePCTcovered(df):
     """
@@ -61,6 +73,7 @@ def genePCTcovered(df):
 
     return([chromosome, startPos, endPos, GeneSymbol, Accession, genePercentage])
 
+
 ### Calculate combined coverage of genes
 gene_coverage_dict = {}
 for i, gene in enumerate(panel_genes):
@@ -81,5 +94,6 @@ below_threshold_genes = gene_coverage_df[
 ### Write gene symbols with suboptimal coverage to file
 outfile = f"genes_w_suboptimal_coverage{coverage_threshold}x.txt"
 with open(outfile, 'w') as fh:
-    fh.write(f"The following genes are not fully covered at {coverage_threshold}x: \n")
+    fh.write(f"In sample {sample_name}, the following genes of panel {panel_name} \
+are not fully covered at {coverage_threshold}x: \n")
 below_threshold_genes.to_csv(outfile, sep="\t", index=False, mode='a')
