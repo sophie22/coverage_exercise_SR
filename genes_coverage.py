@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Python 3.8
 """This script is used to identify poorly covered regions/genes
 
@@ -14,7 +15,7 @@
 # Import libraries/packages for use in the code
 import sys
 import pandas as pd # v1.3.4
-import subprocess
+# import subprocess
 
 ### Read inputs from  the command line
 # sambamba output file (tsv)
@@ -92,7 +93,8 @@ below_threshold_genes = gene_coverage_df[
     ]
 
 ### Write gene symbols with suboptimal coverage to file
-outfile = f"genes_w_suboptimal_coverage{coverage_threshold}x.txt"
+# outfile = f"genes_w_suboptimal_coverage{coverage_threshold}x.txt"
+outfile = sambamba_file.rstrip('sambamba_output.tsv') + f"_suboptimal_genes_{coverage_threshold}x.tsv"
 with open(outfile, 'w') as fh:
     fh.write(f"In sample {sample_name}, the following genes of panel {panel_name} \
 are not fully covered at {coverage_threshold}x: \n")
