@@ -30,3 +30,7 @@ Command used to generate the example output: `python genes_coverage.py NGS148_34
 # Version 0.0.2
 ## New in this version
 Calculate a combined percentage coverage value for each gene and identify genes with less than 100% coverage at 30x. Write information about genes with suboptimal coverage to an output file.
+Input file is now converted to tsv in the script, no need for separate command. Required depth is an input, defaults to 30 and script checks whether a corresponding column is present. Changed output filename to follow input filename.
+
+Command used to generate the example output: `python genes_coverage.py NGS148_34_139558_CB_CMCMD_S33_R1_001.sambamba_output.txt 30`
+
