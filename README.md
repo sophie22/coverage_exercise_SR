@@ -15,14 +15,22 @@ Generate a report that lists any genes that have less than 100% coverage at 30x.
 - Ideally using python, write a script that takes the sambamba output and generates a report listing any genes that have less than 100% coverage at 30x
 - This script should be able to be applied to any gene panel
 
-# Version 0.0.1
-## What is required to run this script?
+### What is required to run this script?
 A new virtual environment was created using Python 3.8.0 and packages installed from the `requirements.txt`.
 The sambamba output file was converted to a tsv by replacing whitespaces with tabs by the following command: 
 
 `sed -e 's/ /\t/g' NGS148_34_139558_CB_CMCMD_S33_R1_001.sambamba_output.txt > NGS148_34_139558_CB_CMCMD_S33_R1_001.sambamba_output.tsv`
 
-## What does this script do?
+## Version 0.0.1
+### What does this script do?
 Using the `percentage30` column, regions with less than 100% coverage at 30x are identified and a list of unique gene symbols is saved to an output file.
 
 Command used to generate the example output: `python genes_coverage.py NGS148_34_139558_CB_CMCMD_S33_R1_001.sambamba_output.tsv`
+
+# Version 0.0.2
+## New in this version
+Calculate a combined percentage coverage value for each gene and identify genes with less than 100% coverage at 30x. Write information about genes with suboptimal coverage to an output file.
+Input file is now converted to tsv in the script, no need for separate command. Required depth is an input, defaults to 30 and script checks whether a corresponding column is present. Changed output filename to follow input filename.
+
+Command used to generate the example output: `python genes_coverage.py NGS148_34_139558_CB_CMCMD_S33_R1_001.sambamba_output.txt 30`
+
