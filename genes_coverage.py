@@ -49,9 +49,6 @@ def main():
     # sambamba output file (txt)
     sambamba_txt = sys.argv[1]
     sambamba_filename = Path(sambamba_txt).stem
-    sambamba_tsv = sambamba_filename + ".tsv"
-    command = f"sed -e 's/ /\t/g' {sambamba_txt} > {sambamba_tsv}"
-    process = subprocess.call(command, shell=True)
 
     # Parse sample and panel name from the input filename
     sample_name = sambamba_filename.split("_")[0]
